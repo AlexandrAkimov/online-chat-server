@@ -1,13 +1,22 @@
 const { Friends } = require('../models/models')
-const { Pool } = require('pg')
+const {Sequelize} = require('sequelize')
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
+const pool = new Sequelize(process.env.DB_URL, {
+  ssl: true,
+  dialect: 'postgres',
   database: process.env.DB_NAME,
   password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  username: process.env.DB_USER,
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // <<<<<<< YOU NEED THIS
+    },
+  }
 })
+
 const ApiError = require('../error/ApiError')
 
 class FriendController {
@@ -34,17 +43,17 @@ class FriendController {
   }
 
   async getFriend(req, res, next) {
-    pool.query(`
+    try {
+      const result = await pool.query(`
         SELECT friends.id, friendid, userid, users.nickname, users.photo 
         FROM friends 
         INNER JOIN users ON friends.friendid = users.id
         WHERE friends.userid = ${req.user.id}
-      `, (error, response) => {
-      if (error) {
-        return next(ApiError.internal('Не удалось запросить ваших друзей'))
-      }
-      return res.status(200).json(response)
-    })
+      `)
+      return res.status(200).json(result[0])
+    } catch (error) {
+      return next(ApiError.internal('Не удалось запросить ваших друзей'))
+    }
     
   }
 
