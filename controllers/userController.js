@@ -1,4 +1,3 @@
-require('dotenv').config()
 const bcrypt = require('bcrypt')
 const { Op } = require('sequelize')
 const jwt = require('jsonwebtoken')
@@ -10,7 +9,7 @@ const ApiError = require('../error/ApiError')
 
 
 const generateToken = (options) => {
-  return jwt.sign(options, process.env.SECRET_KEY, {
+  return jwt.sign(options, 'process.env.SECRET_KEY_PROBLEM_HEROKU_WITH_proces.env', {
     expiresIn: '24h'
   })
 }
@@ -92,7 +91,7 @@ class UserController {
       return next(ApiError.internal('Пользователя с таким никнеймом не существует'))
     }
 
-
+    
 
     let comparePassword = bcrypt.compareSync(password, user.password)
 
@@ -100,8 +99,8 @@ class UserController {
       return next(ApiError.internal('Указан неверный пароль'))
     }
 
-    const token = generateToken({ id: user.id, nickname, photo: user.photo || '' })
-    
+    const token = generateToken({ id: user.id, nickname, photo: user.photo })
+
     return res.json({ token })
 
   }
