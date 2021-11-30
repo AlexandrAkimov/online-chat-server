@@ -10,8 +10,6 @@ const models = require('./models/models')
 const router = require('./routes')
 const errorHandler = require('./middleware/ErrorHandlingMiddleware')
 
-const PORT = process.env.PORT || 5000
-
 const app = express()
 app.use(cors())
 app.use(fileUpload({uploadTimeout: 0}))
@@ -62,6 +60,8 @@ function broadcastMessage(message, room) {
     }
   })
 }
+
+const PORT = process.env.PORT || 5000
 
 const start = async () => {
   try {
