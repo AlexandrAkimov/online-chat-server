@@ -1,6 +1,6 @@
 const {Sequelize} = require('sequelize')
 
-module.exports = new Sequelize('postgres://kqpclnyikvhceo:987056e8ad626c4b0c55a991745326d7bcdac45a3fd695a156194e27c4e5c539@ec2-34-250-16-127.eu-west-1.compute.amazonaws.com:5432/d5pa1486hea44g', {
+module.exports = new Sequelize('postgres://ivdcmtjncyrisb:40510b6cab18c66e5db73b5ef003be4fe44265d83064c6a97ef5a12b06ff8edf@ec2-54-220-223-3.eu-west-1.compute.amazonaws.com:5432/dar3h0nmqtuce4', {
   ssl: true,
   dialect: 'postgres',
   database: process.env.DB_NAME,
